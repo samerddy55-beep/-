@@ -1,16 +1,16 @@
-```javascript
+
 "use strict";
 
 (() => {
   const config = window.NOVA_CONFIG;
 
   if (!config?.SUPABASE_URL || !config?.SUPABASE_KEY) {
-    console.error("إعدادات Supabase غير موجودة. تحقق من config.js.");
+    console.error("Supabase config missing. Check config.js.");
     return;
   }
 
   if (!window.supabase?.createClient) {
-    console.error("مكتبة Supabase لم يتم تحميلها.");
+    console.error("Supabase library failed to load.");
     return;
   }
 
@@ -27,7 +27,9 @@
         email: email.trim(),
         password,
         options: {
-          data: { display_name: displayName.trim() }
+          data: {
+            display_name: displayName.trim()
+          }
         }
       });
 
@@ -37,8 +39,8 @@
         user: data.user,
         session: data.session,
         message: data.session
-          ? "تم إنشاء الحساب وتسجيل الدخول."
-          : "تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيده."
+          ? "Account created and signed in."
+          : "Account created. Check your email to confirm it."
       };
     },
 
@@ -64,8 +66,10 @@
     },
 
     async getProfile() {
-      const { data: { user }, error: userError } =
-        await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
 
       if (userError) throw userError;
       if (!user) return null;
@@ -89,6 +93,5 @@
     }
   });
 
-  console.info("تم تهيئة اتصال NOVA مع Supabase.");
+  console.info("NOVA connected to Supabase.");
 })();
-```
